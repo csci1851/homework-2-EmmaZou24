@@ -26,11 +26,7 @@ class HW1DataLoader:
 
     def get_heart_disease_data(self, csv_path=None) -> Tuple[pd.DataFrame, pd.Series]:
         """
-        Load the Heart Disease dataset from UCI via Kaggle
-
-        Args:
-            csv_path: Path to the CSV file (optional) if data is already downloaded elsewhere.
-
+        Load the Heart Disease dataset from CSV file.
         Returns:
             X: Features DataFrame
             y: Target Series (presence of heart disease)

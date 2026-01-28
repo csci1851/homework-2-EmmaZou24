@@ -86,9 +86,10 @@ class GenomicAgeRegressor:
         # TODO: Implement model evaluation
         # Use self.predict(X) then compute:
         #   - mse: mean_squared_error(y, y_pred)
+        #   - rmse: sqrt(mse)
         #   - r2:  r2_score(y, y_pred)
         #   - mae: mean_absolute_error(y, y_pred)
-        # Return a dict with keys: "mse", "r2", "mae"
+        # Return a dict with keys: "mse", "rmse", "r2", "mae"
         pass
 
     def cross_validate(
@@ -106,7 +107,7 @@ class GenomicAgeRegressor:
         #   2. Fit on train
         #   3. Evaluate on val
         #   4. Append metrics to cv_results
-        cv_results = {"mse": [], "r2": [], "mae": []}
+        cv_results = {"mse": [], "rmse": [], "r2": [], "mae": []}
         pass
 
 

@@ -1,7 +1,7 @@
 """
 Visualization utilities for Homework 1: Regression and Classification
 
-This module provides visualization functions for:
+This script provides visualization functions for:
 1. Decision boundary visualization for logistic regression models
 2. ROC-AUC curve visualization
 """

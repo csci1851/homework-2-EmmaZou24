@@ -21,9 +21,9 @@ You will work with two datasets:
 - **Features**: Demographics, cholesterol, ECG results, etc.
 
 2. Biological Aging Dataset (Regression)
-- **Goal**: Predict biological age using molecular and physiological features.
-- **Source**: High-dimensional gene expression dataset (GSE139307).
-- **Features**: A hundred genomic and biological markers, already preprocessed and normalized. The data provided can be further separated into four tissue types: blood WBC, blood leukocyte, saliva, and kidney.
+- **Goal**: Predict biological age from DNA methylation patterns.
+- **Source**: Public high-dimensional DNA methylation dataset (GSE139307).
+- **Features**: Preprocessed and normalized DNA methylation features (epigenetic markers), with samples grouped by tissue type (blood WBC, blood leukocyte, saliva, kidney).
 
 ---
 
@@ -49,6 +49,17 @@ Install dependencies using pip:
 After creating and activating the virtual environment, select it as the Jupyter kernel in `src/playground.ipynb` to run the notebook using the same installed dependencies.
 
 ---
+## Data Normalization and Missing Values
+
+Both datasets are already preprocessed, but they differ in how scaling should be handled during modeling.
+
+For the heart disease dataset, features are measured on different scales (e.g., age, cholesterol, blood pressure). Feature scaling can therefore affect model performance. You are encouraged to compare models trained **with and without feature scaling** (e.g., standardization) and analyze the impact on evaluation metrics.
+
+For the biological aging (DNA methylation) dataset, features are normalized methylation beta values between 0 and 1. No additional biological normalization is needed. You may still apply feature scaling (e.g., z-score standardization) before regression so that features are on similar scales, especially when using regularized models.
+
+Both datasets may contain missing values. You should identify and handle missing data appropriately (e.g., using feature-wise mean or median imputation), and ensure that any imputation or scaling is fit only on the training data to avoid data leakage.
+
+---
 
 ## Tasks
 
@@ -62,11 +73,11 @@ You will complete the TODOs in `src/model.py` and `src/playground.ipynb` to acco
 - [ ] Evaluate with accuracy, precision, recall, F1-score using K-fold cross-validation.
 
 ### Biological Aging Dataset
-- [ ] Train a linear regression model on the biological aging dataset split by tissue type.
-- [ ] Evaluate with MAE (Mean Absolute Error), RMSE (Root Mean Squared Error), $R^2$ score.
-- [ ] Evaluate generalizability of tissue-specific models to other tissue-types.
-- [ ] Train more models with limited feature selection selecting maximally variable features and evaluate.
-- [ ] Visualize predicted vs actual age plots.
+- [ ] Train a linear regression model on the biological aging (DNA methylation) dataset, split by tissue type.
+- [ ] Evaluate models using MAE (Mean Absolute Error), RMSE (Root Mean Squared Error), and \(R^2\).
+- [ ] Evaluate the generalizability of tissue-specific models to other tissue types.
+- [ ] Train additional models using limited feature selection (e.g., selecting the most variable methylation features) and evaluate their performance.
+- [ ] Visualize predicted vs. actual age using scatter plots.
 
 ---
 
@@ -94,13 +105,13 @@ Answer the following questions (with figures/screenshots where relevant):
 * What are the main limitations of the dataset and the logistic regression model?
 * How did feature scaling or transformations change your results (ROC-AUC and/or decision boundary)?
 
-* What are the main characteristics of the biological aging dataset and the specific tissues present in the dataset?
-* How well did tissue-specific models perform (MAE, RMSE, \(R^2\))?
-* How well did models generalize across tissues (summarize in a heatmap or table: train tissue \(\rightarrow\) test tissue)?
-* How closely did predicted ages match true ages (include predicted vs. actual scatter plots, at least one per tissue)?
-* How did performance change when using limited feature sets (top variance 100 features) compared to full-feature models?
-* What are at other feature selection strategies you could apply beyond selecting top-variance features?
-* What are the main limitations of the dataset and regression models (data quality, assumptions, generalizability)?
+* What are the main characteristics of the biological aging (DNA methylation) dataset and the specific tissues present in the dataset?
+* How well did tissue-specific regression models perform (MAE, RMSE, \(R^2\))?
+* How well did models generalize across tissues? Summarize results in a heatmap or table showing train tissue \(\rightarrow\) test tissue.
+* How closely did predicted ages match true ages? Include predicted vs. actual scatter plots (e.g. one per tissue).
+* How did performance change when using limited feature sets (e.g., top-variance methylation features) compared to full-feature models?
+* What other feature selection strategies could be applied beyond selecting top-variance features?
+* What are the main limitations of the dataset and linear regression models (data quality, modeling assumptions, generalizability)?
 * Which tissues generalized poorly, and why might that be?
 ---
 
