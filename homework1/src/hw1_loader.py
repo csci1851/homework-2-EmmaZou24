@@ -1,12 +1,13 @@
 """Data loader for Homework 1: Regression and Classification"""
 
-import os
 import pandas as pd
-from typing import Tuple
+from typing import Optional, Tuple
 
 
 class HW1DataLoader:
-    def get_aging_data(self, csv_path=None) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def get_aging_data(
+        self, csv_path=None
+    ) -> Tuple[Optional[pd.DataFrame], Optional[pd.Series], Optional[pd.DataFrame]]:
         """
         Load the genomic aging dataset from CSV file.
         Returns:
@@ -22,9 +23,11 @@ class HW1DataLoader:
             return X, y, metadata
         except Exception as e:
             print(f"Error loading genomic aging dataset: {e}")
-            return None
+            return None, None, None
 
-    def get_heart_disease_data(self, csv_path=None) -> Tuple[pd.DataFrame, pd.Series]:
+    def get_heart_disease_data(
+        self, csv_path=None
+    ) -> Tuple[Optional[pd.DataFrame], Optional[pd.Series]]:
         """
         Load the Heart Disease dataset from CSV file.
         Returns:
