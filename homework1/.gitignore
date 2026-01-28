@@ -60,3 +60,4 @@ Thumbs.db
 results
 
 data.parquet.*
+.DS_Store
