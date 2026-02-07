@@ -88,7 +88,7 @@ def plot_decision_boundary(
 
         # Project coefficients into PCA space
         # W_pca = W_orig * V.T where V is the PCA components matrix
-        pca_coef = np.dot(original_coef, pca.components_)  # Shape: (2,)
+        pca_coef = np.dot(pca.components_, original_coef)  # Shape: (2,)
 
         # The intercept remains the same
         pca_intercept = original_intercept
