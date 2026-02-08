@@ -19,7 +19,7 @@ You will work with two datasets geared towards classification tasks:
 - **Goal**: Predict presence/absence of heart disease.
 - **Features**: Demographics, cholesterol, ECG results, etc.
 
-1. Cancer Genomics Dataset
+2. Cancer Genomics Dataset
 - **Goal**: Predict cancer type based on genomic signals.
 - **Source**: UCI (https://archive.ics.uci.edu/dataset/401/gene+expression+cancer+rna+seq)
 - **Features**: Genomic signals from hundreds of gene loci for different patient samples. If you look at the data (data/cancer_genomics.csv) you'll see that some columns seem to be missing. To reduce the size of the dataset, we have performed some initial feature selection based on variance. 
@@ -63,7 +63,7 @@ You will complete the TODOs in `model.py` and `playground.ipynb` to accomplish t
 - [ ] Prepare a training/evaluation pipeline to make testing different model configurations easier (scikit-learn has some nice functions for this)
 
 ### Gradient Boosting Models
-- [ ] Train a gradient boosted on both datasets with and without feature transformation.
+- [ ] Train a gradient boosted on both datasets with and without standardization.
 - [ ] Evaluate with accuracy, precision, recall, F1-score using K-fold cross-validation (consider how some of these metrics change in the multi-class context).
 - [ ] Experiment with trees of different depths and the size of your ensemble of models. Track evaluations of your model performance.
 - [ ] Implement hyperparameter tuning and cross validation to ensure optimal model selection.
