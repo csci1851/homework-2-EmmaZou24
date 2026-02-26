@@ -98,8 +98,9 @@ class GradientBoostingModel:
         Returns:
             X_train, X_test, y_train, y_test: Split datasets
         """
+        #check labels, train-test split, maybe map labels to integers, check confusion matrix
         # TODO: Implement train/test split and track feature names
-        return train_test_split(X, y, test_size=test_size, random_state=random_state)
+        return train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y) #stratification
         # pass
 
     def fit(self, X_train: pd.DataFrame, y_train: pd.Series, verbose: bool = False):
@@ -244,7 +245,10 @@ class GradientBoostingModel:
 
         # TODO: Choose scoring metrics based on classification vs regression
         if self.task == "classification":
-            scoring = ["accuracy", "precision", "recall", "f1", "roc_auc"]
+            if len(np.unique(y))==2:
+                scoring = ["accuracy", "precision", "recall", "f1", "roc_auc"]
+            else:
+                scoring = ["accuracy", "precision_weighted", "recall_weighted", "f1_weighted", "roc_auc_ovr_weighted"]
         else:
             scoring = ["neg_mean_squared_error", "neg_mean_absolute_error", "r2"]
 
@@ -391,7 +395,7 @@ class Hw1Classifier:
         # 3. Initialize LogisticRegression
         # 4. Fit the model and store in self.model
         X_proc = self.preprocess_features(X)
-        if self.selected_features:
+        if self.selected_features is not None:
             X_proc = X_proc.loc[:, self.selected_features]
         if scale:
             X_col = X_proc.columns
@@ -422,7 +426,7 @@ class Hw1Classifier:
         if self.model is None:
             raise ValueError('Please fit your model first!')
         X_proc = self.preprocess_features(X)
-        if self.selected_features:
+        if self.selected_features is not None:
             X_proc = X.loc[:, self.selected_features]
         if scale:
             X_col = X_proc.columns
@@ -461,18 +465,28 @@ class Hw1Classifier:
         if not self.model:
             raise ValueError('Please fit your model first!')
         #scaling
-        # if scale:
-        #     X = self.scaler.transform(X)
-        y_pred = self.predict(X, scale=scale)
-        y_proba = self.predict(X, return_proba=True, scale=scale)
+        X_proc = self.preprocess_features(X)
+        if self.selected_features is not None:
+            X_proc = X_proc.loc[:, self.selected_features]
+        if scale:
+            X_col = X_proc.columns
+            X_index = X_proc.index
+            X_proc = pd.DataFrame(self.scaler.transform(X_proc), columns=X_col, index=X_index)
+        y_pred = self.model.predict(X_proc)
+        y_proba_full = self.model.predict_proba(X_proc)
         metrics = dict()
         metrics['accuracy'] = accuracy_score(y, y_pred)
-        metrics['precision'] = precision_score(y, y_pred, zero_division=0)
-        metrics['recall'] = recall_score(y, y_pred, zero_division=0)
-        metrics['f1'] = f1_score(y, y_pred, zero_division=0)
-        metrics['auc'] = np.nan
-        if len(np.unique(y))==2:
-            metrics['auc'] = roc_auc_score(y, y_proba)
+        n_classes = len(np.unique(y))
+        if n_classes == 2:
+            metrics['precision'] = precision_score(y, y_pred)
+            metrics['recall'] = recall_score(y, y_pred)
+            metrics['f1'] = f1_score(y, y_pred)
+            metrics['roc_auc'] = roc_auc_score(y, y_proba_full[:, 1])
+        else:
+            metrics['precision'] = precision_score(y, y_pred, average='weighted')
+            metrics['recall'] = recall_score(y, y_pred, average='weighted')
+            metrics['f1'] = f1_score(y, y_pred, average='weighted')
+            metrics['roc_auc'] = roc_auc_score(y, y_proba_full, multi_class='ovr', average='weighted')
         return metrics
 
     def cross_validate(
